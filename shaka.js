@@ -28,6 +28,14 @@ const shakaConfig = {
   },
   // I set the preferred audio language in the config as I was getting an error if I set it later in audio function: 'No preferred audio language set.  We have chosen an arbitrary language initially'
   preferredAudioLanguage: "en",
+  ...(getDeviceType() === "crapDevice" && {
+    abr: {
+      restrictions: {
+        maxWidth: 180,
+        maxHeight: 144,
+      },
+    },
+  }),
 };
 
 async function shakaInitPlayer(manifestUri) {
