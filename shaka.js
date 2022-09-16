@@ -26,6 +26,8 @@ const shakaConfig = {
   streaming: {
     alwaysStreamText: true,
   },
+  // I set the preferred audio language in the config as I was getting an error if I set it later in audio function: 'No preferred audio language set.  We have chosen an arbitrary language initially'
+  preferredAudioLanguage: "en",
 };
 
 async function shakaInitPlayer(manifestUri) {
@@ -67,7 +69,7 @@ async function shakaInitPlayer(manifestUri) {
     getSubtitleTracks();
 
     // pull audio tracks
-    // ...
+    getAudioTracks();
 
     // set progress bar duration
     setProgressBar();
@@ -116,9 +118,23 @@ function getSubtitleTracks() {
 
 function getAudioTracks() {
   // get available audio tracks from Shaka
-  // select default language
-  // set Shaka default audioTrack
+  const audioTracks = player.getAudioLanguages();
+
   // add audio options to UI
+  const audioWrapper = document.querySelector(".video-container__audio-tracks");
+
+  audioTracks.forEach((language) => {
+    let item = document.createElement("div");
+    item.className = "track-item";
+    item.innerText = language;
+    audioWrapper.appendChild(item);
+    item.addEventListener("click", ({ target }) => {
+      // I disabled and re-enabled abr when selecting audio language as a console error said it could result in track being overriden
+      player.configure({ abr: { enabled: false } });
+      player.selectAudioLanguage(target.innerText);
+      player.configure({ abr: { enabled: true } });
+    });
+  });
 }
 
 function renderSubtitle(activeCues) {

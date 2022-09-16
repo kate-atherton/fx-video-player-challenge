@@ -61,6 +61,10 @@ function destroyPlayer() {
     .querySelector(".video-container__subtitle-tracks")
     .classList.add("hide");
   document.querySelector(".video-container__subtitle-tracks").innerHTML = "";
+  document
+    .querySelector(".video-container__audio-tracks")
+    .classList.add("hide");
+  document.querySelector(".video-container__audio-tracks").innerHTML = "";
 }
 
 // set up handlers
